@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Music Player</title>
+    <link href="/styles/styles.css" rel="stylesheet" />
+    <script
+      src="https://kit.fontawesome.com/e50e1d293e.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="music-player">
+        <h1>Dj Livi</h1>
+        <p>Lo que haz estado escuchando</p>
+        <nav>
+          <div class="circle">
+            <i class="fa-solid fa-angle-left"></i>
+          </div>
+          <div class="circle">
+            <i class="fa-solid fa-ellipsis"></i>
+          </div>
+        </nav>
+        <img src="styles/dj-ivi.png" class="song-img" />
+        <audio id="song">
+          <source src="audio/Audio livi 3.mp3" type="audio/mpeg" />
+        </audio>
+        <input type="range" value="0" id="progress" />
+        <div class="controls">
+          <div><i class="fa-solid fa-backward-step"></i></div>
+          <div onclick="playPause()"><i class="fa-solid fa-play" id="controlIcon"></i></div>
+          <div onclick="playNextSong()"><i class="fa-solid fa-forward-step"></i></div>
+        </div>
+      </div>
+    </div>
+<script>
+
+    let progress = document.getElementById('progress'); 
+    let song = document.getElementById("song");
+    let ctrlIcon = document.getElementById("controlIcon"); 
+    
+    let songs = ['/audio/Audio livi 1.mp3', 
+    '/audio/Audio livi 2.mp3', 
+    '/audio/Audio livi 3.mp3'];
+
+    let currentSongIndex = 0;
+
+ function loadSong(index) {
+        song.src = songs[index];
+        song.load(); 
+        song.play(); 
+      }
+
+    song.onloadeddata = function(){
+        progress.max = song.duration;
+        progress.value = song.currentTime; 
+    }
+
+    function playPause(){
+        if(ctrlIcon.classList.contains("fa-circle-pause")){
+            song.pause();
+            ctrlIcon.classList.remove("fa-circle-pause");
+            ctrlIcon.classList.add("fa-play");
+        }else{
+            song.play()
+            ctrlIcon.classList.add("fa-circle-pause");
+            ctrlIcon.classList.remove("fa-play");
+        }
+    }
+
+    function playNextSong() {
+        currentSongIndex++;
+        if (currentSongIndex >= songs.length) {
+          currentSongIndex = 0; 
+        }
+        loadSong(currentSongIndex); 
+      }
+
+//every 500 ms (0.5 seconds) the input (progress.value) will update to the current time value.
+if(song.play()){
+    setInterval(()=>{
+        progress.value = song.currentTime;
+    },500)
+}
+
+progress.onchange = function(){
+    song.play();
+    song.currentTime = progress.value; 
+}
+
+</script>
+  </body>
+</html>
